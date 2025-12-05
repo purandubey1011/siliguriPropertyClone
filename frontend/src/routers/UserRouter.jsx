@@ -25,6 +25,7 @@ import SignUp from '../pages/auth/SignUp.jsx'
 import GoogleLogin from '../components/GoogleLogin.jsx'
 import FacebookLogin from '../components/FacebookLogin.jsx'
 import OwnerProperties from '../components/Owner/OwnerProperties.jsx'
+import UserProfile from "../components/User/profile/UserProfile.jsx";
 // import ResetPassword from '../components/auth/signin/ResetPassword'
 
 const UserRouter = () => {
@@ -58,6 +59,7 @@ const UserRouter = () => {
 
         <Route path="/user" element={<UserLayout/>}>
           <Route path="/user/list" element={<Listpage />} />
+          <Route path="/user/profile" element={<UserProfile />} />
           <Route path='/user/about' element={<About/>} />
             <Route path='/user/contact' element={<Contact/>} />
             <Route path='/user/propertydetail/:id' element={<Propertdetailpage/>} />

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ResgisterUser, selectAuthError, selectAuthMessage, selectAuthStatus } from '../../../store/authSlice';
 import Navbar from '../../Navbar';
@@ -57,17 +57,26 @@ const Signupform = () => {
   const status = useSelector(selectAuthStatus);
   const message = useSelector(selectAuthMessage);
   const error = useSelector(selectAuthError);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(
-     ResgisterUser({
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const res = await dispatch(
+    ResgisterUser({
       username,
       email,
-      password
-     })
-    );
-  };
+      password,
+    })
+  );
+
+  console.log("Register Result:", res);
+
+  // Navigate on success
+  if (ResgisterUser.fulfilled.match(res)) {
+    navigate("/");
+  }
+};
 
   return (
     <div className="min-h-screen flex px-2 md:px-0 flex-col font-sans bg-gray-50 overflow-hidden">
