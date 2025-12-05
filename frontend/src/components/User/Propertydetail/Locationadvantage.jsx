@@ -1,57 +1,63 @@
 import React from "react";
-import { RiBankLine, RiTrainLine } from "react-icons/ri";
+import {
+  RiBankLine,
+  RiTrainLine,
+  RiHospitalLine,
+  RiBusLine,
+  RiBuildingLine,
+  RiRoadMapLine,
+  RiMapPinLine,
+  RiFlightTakeoffLine,
+} from "react-icons/ri";
 
-// --- Static data for the location advantages ---
-const advantagesData = [
-  {
-    icon: "hospital", // Custom 'H' icon
-    title: "Desun Hospital",
-    distance: "3.1 KM",
-  },
-  {
-    icon: <RiBankLine />,
-    title: "Bangalore University",
-    distance: "3.1 KM",
-  },
-  {
-    icon: <RiTrainLine />,
-    title: "City Metro",
-    distance: "3.1 KM",
-  },
-];
+// -------- ICON AUTO-DETECT FUNCTION --------
+const detectIcon = (title) => {
+  const text = title.toLowerCase();
 
+  if (text.includes("hospital") || text.includes("clinic"))
+    return <RiHospitalLine />;
 
+  if (text.includes("bank")) return <RiBankLine />;
 
-// --- Main LocationAdvantages Component ---
-const LocationAdvantages = ({locationAdvantages}) => {
-  console.log('locationAdvantages ->',locationAdvantages);
-  // data format is - [{no icon, title: "Desun Hospital", range: "3.1 KM"}, {...}, ...]
-  // shivam map thi data properly with icon
+  if (text.includes("metro") || text.includes("train") || text.includes("rail"))
+    return <RiTrainLine />;
 
-  // --- Single Card Component ---
-const AdvantageCard = ({ icon, title, distance }) => {
-  const renderIcon = () => {
-    if (icon === "hospital") {
-      return (
-        <div className="w-8 h-8 rounded-full border-2 border-[#D10369] text-[#D10369] flex items-center justify-center font-bold text-lg">
-          H
-        </div>
-      );
-    }
-    return <div className="text-[#D10369] text-3xl">{icon}</div>;
-  };
+  if (text.includes("bus")) return <RiBusLine />;
 
-  return (
-    <div className="bg-[#FFF9FB] p-6 rounded-2xl space-y-4 hover:shadow-md transition-all">
-      {renderIcon()}
-      <h3 className="text-xl font-bold text-gray-800">{title}</h3>
-      <p>
-        <span className="text-2xl font-bold text-[#D10369]">{distance}</span>
-        <span className="text-sm text-gray-500 ml-1.5">away</span>
-      </p>
-    </div>
-  );
+  if (text.includes("university") || text.includes("school") || text.includes("college"))
+    return <RiBuildingLine />;
+
+  if (text.includes("airport")) return <RiFlightTakeoffLine />;
+
+  if (text.includes("mall") || text.includes("market"))
+    return <RiMapPinLine />;
+
+  if (text.includes("road") || text.includes("highway"))
+    return <RiRoadMapLine />;
+
+  // DEFAULT ICON
+  return <RiMapPinLine />;
 };
+
+// ---------------------------------------------------
+const LocationAdvantages = ({ locationAdvantages = [] }) => {
+  console.log("locationAdvantages ->", locationAdvantages);
+
+  // data format expected:
+  // [{title: "Desun Hospital", range: "3.1 KM"}, {...}, ...]
+
+  const AdvantageCard = ({ icon, title, distance }) => {
+    return (
+      <div className="bg-[#FFF9FB] p-6  space-y-4 hover:shadow-md transition-all border rounded-2xl border-pink-300">
+        <div className="text-[#D10369] text-3xl">{icon}</div>
+        <h3 className="text-2xl font-bold text-gray-800 capitalize">{title}</h3>
+        <p>
+          <span className="text-2xl font-bold text-[#D10369]">{distance}</span>
+          <span className="text-md text-gray-500 ml-1.5">away</span>
+        </p>
+      </div>
+    );
+  };
 
   return (
     <div className="bg-gray-50 font-sans py-16 sm:py-24">
@@ -68,14 +74,18 @@ const AdvantageCard = ({ icon, title, distance }) => {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {advantagesData.map((advantage, index) => (
-            <AdvantageCard
-              key={index}
-              icon={advantage.icon}
-              title={advantage.title}
-              distance={advantage.distance}
-            />
-          ))}
+          {locationAdvantages.length > 0 ? (
+            locationAdvantages.map((adv, index) => (
+              <AdvantageCard
+                key={index}
+                icon={detectIcon(adv.title)}
+                title={adv.title}
+                distance={adv.range || adv.distance}
+              />
+            ))
+          ) : (
+            <p>No location advantages found.</p>
+          )}
         </div>
       </div>
     </div>
