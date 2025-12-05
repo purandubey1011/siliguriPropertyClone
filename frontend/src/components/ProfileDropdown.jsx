@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logOutUser } from '../store/authSlice';
 import { toast } from 'react-toastify';
 
 const ProfileDropdown = ({isScrolled}) => {
+  const navigate = useNavigate();
      const dropdownRef = useRef(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     
@@ -77,6 +78,8 @@ const ProfileDropdown = ({isScrolled}) => {
                               progress: undefined,
                               theme: "light",
                             })
+
+                            navigate("/signin");
                           }
                         });
                         setIsDropdownOpen(false);
