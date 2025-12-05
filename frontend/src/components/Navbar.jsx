@@ -242,7 +242,7 @@ const Navbar = ({ bgcolor = "rgba(100, 116, 139, 0.2)" }) => {
               ) : (
                 <>
                   <Link
-                    to="/profile"
+                    to="/user/profile"
                     className="text-2xl font-light hover:text-pink-400 transition-colors"
                   >
                     Profile Settings
