@@ -82,6 +82,7 @@ const MediaUpload = ({
             name: file.name,
             type: file.type,
             url: res.url,
+            tag: "",
           }))
         )
       );
@@ -143,7 +144,6 @@ const MediaUpload = ({
 
   return (
     <div className={`space-y-8 ${className}`}>
-
       {/* ---------------- SINGLE FEATURED IMAGE UPLOAD ---------------- */}
       <div className="space-y-2">
         <FormField label="Upload Featured Image" />
@@ -236,26 +236,56 @@ const MediaUpload = ({
         </div>
 
         {uploadedFiles.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-8 gap-4 mt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-5">
             {uploadedFiles.map((file) => (
-              <div key={file.id} className="relative group">
-                <img
-                  src={file.url}
-                  className="w-24 h-24 object-cover rounded-lg mx-auto"
-                />
+              <div
+                key={file.id}
+                className="relative bg-white border border-pink-500 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition p-2"
+              >
+                {/* IMAGE */}
+                <div className="relative w-full h-36 rounded-lg overflow-hidden">
+                  <img src={file.url} className="w-full h-full object-cover" />
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    const updated = uploadedFiles.filter(
-                      (f) => f.id !== file.id
+                  {/* DELETE BUTTON */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updated = uploadedFiles.filter(
+                        (f) => f.id !== file.id
+                      );
+                      updateFiles(updated);
+                    }}
+                    className="absolute top-2 right-2 bg-black/60 text-white rounded-full px-2 py-1.5 text-xs hover:bg-black"
+                  >
+                    ✕
+                  </button>
+
+                  {/* TOP-RIGHT TAG ON PREVIEW IF EXISTS */}
+                  {file.tag && (
+                    <span className="absolute bottom-2 right-2 bg-pink-600 text-white text-[10px] px-2 py-1 rounded-md shadow">
+                      {file.tag}
+                    </span>
+                  )}
+                </div>
+
+                {/* TAG INPUT */}
+                <input
+                  type="text"
+                  placeholder="Add Tag (Kitchen, Hall, etc.)"
+                  value={file.tag || ""}
+                  onChange={(e) => {
+                    const updated = uploadedFiles.map((f) =>
+                      f.id === file.id ? { ...f, tag: e.target.value } : f
                     );
                     updateFiles(updated);
                   }}
-                  className="absolute top-1 right-1 bg-black text-white rounded-full p-1 text-xs opacity-80 group-hover:opacity-100"
-                >
-                  ✕
-                </button>
+                  className="
+            w-full mt-2 px-2 py-1.5 text-xs 
+            border border-gray-300 rounded-lg 
+            focus:outline-none focus:ring-2 focus:ring-pink-500
+            placeholder:text-gray-500
+          "
+                />
               </div>
             ))}
           </div>

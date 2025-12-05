@@ -41,10 +41,6 @@ const detectIcon = (title) => {
 
 // ---------------------------------------------------
 const LocationAdvantages = ({ locationAdvantages = [] }) => {
-  console.log("locationAdvantages ->", locationAdvantages);
-
-  // data format expected:
-  // [{title: "Desun Hospital", range: "3.1 KM"}, {...}, ...]
 
   const AdvantageCard = ({ icon, title, distance }) => {
     return (

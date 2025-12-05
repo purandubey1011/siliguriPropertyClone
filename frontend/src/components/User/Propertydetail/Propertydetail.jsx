@@ -8,17 +8,14 @@ import {
   FiPhone,
 } from "react-icons/fi";
 
+import { FaBed, FaBath, FaCar } from "react-icons/fa";
+import { BsBuilding, BsCircle, BsArrowsFullscreen } from "react-icons/bs";
 import {
-  FaBed,
-  FaBath,
-  FaCar,
-} from "react-icons/fa";
-import {
-  BsBuilding,
-  BsCircle,
-  BsArrowsFullscreen,
-} from "react-icons/bs";
-import { MdChair, MdBalcony, MdAreaChart, MdOutlineSimCardDownload } from "react-icons/md";
+  MdChair,
+  MdBalcony,
+  MdAreaChart,
+  MdOutlineSimCardDownload,
+} from "react-icons/md";
 import LocationAdvantages from "./Locationadvantage.jsx";
 import FloorPlans from "./FloorPlan.jsx";
 import ConstructionStatus from "./Constructionstatus.jsx";
@@ -27,38 +24,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProperty } from "../../../store/propertySlice.js";
 import dummy from "../../../assets/default.png";
 
-
 const Propertydetail = () => {
   let [propertyData, setPropertyData] = useState([]);
-  // const [images, setimages] = useState([])
 
   let dispatch = useDispatch();
 
   let params = useParams();
   let propertyId = params.id;
 
-   const user = useSelector((state) => state.auth.user);
-   
+  const user = useSelector((state) => state.auth.user);
 
-   useEffect(() => {
-      dispatch(getAllProperty()).then((data)=>{
-       setPropertyData(data?.payload?.properties);
-     })
-   }, [propertyId]);
+  useEffect(() => {
+    dispatch(getAllProperty()).then((data) => {
+      setPropertyData(data?.payload?.properties);
+    });
+  }, [propertyId]);
 
-   function getSinglePropertyById(id) {
-     return propertyData.find((property) => property._id === id);
-   }
-   
-   const filteredProperty = getSinglePropertyById(propertyId)
-   console.log('single property data ->',filteredProperty);
+  function getSinglePropertyById(id) {
+    return propertyData.find((property) => property._id === id);
+  }
 
+  const filteredProperty = getSinglePropertyById(propertyId);
 
-  //  let {address } = filteredProperty || {};
-  //  console.log('address',address);
-
-
-  const{
+  const {
     propertyTitle,
     firstName,
     lastName,
@@ -83,42 +71,36 @@ const Propertydetail = () => {
     mediaFiles,
     numberofcarparking,
     watersupply,
-    ownershipType ,
+    ownershipType,
     brochure,
     phoneNumber,
     whatsappNumber,
-    locationAdvantages
+    locationAdvantages,
   } = filteredProperty || {};
-  console.log('filteredProperty',filteredProperty);
 
-
-
-
-const images = filteredProperty?.mediaFiles?.map((img) => img.url) || [];
-console.log(dummy)
-console.log(images)
+  const images = filteredProperty?.mediaFiles?.map((img) => img.url) || [];
 
   const overview = [
-    { icon: <FaBed />, label: "Bedrooms", value:bedrooms },
-    { icon: <MdAreaChart />, label: "Super Area", value:superBuiltUpArea },
+    { icon: <FaBed />, label: "Bedrooms", value: bedrooms },
+    { icon: <MdAreaChart />, label: "Super Area", value: superBuiltUpArea },
     { icon: <BsBuilding />, label: "Property Type", value: propertyType },
-    { icon: <BsCircle />, label: "Status", value:typeOfPossession },
-    { icon: <MdChair />, label: "Furnishing", value:furnishing },
-    { icon: <FiCheckCircle />, label: "Verification", value:verification},
-    { icon: <FaBath />, label: "Bathrooms", value:bathrooms},
-    { icon: <FaCar />, label: "Parking", value:parking },
-    { icon: <MdBalcony />, label: "Balconies", value:numberofbalconies},
+    { icon: <BsCircle />, label: "Status", value: typeOfPossession },
+    { icon: <MdChair />, label: "Furnishing", value: furnishing },
+    { icon: <FiCheckCircle />, label: "Verification", value: verification },
+    { icon: <FaBath />, label: "Bathrooms", value: bathrooms },
+    { icon: <FaCar />, label: "Parking", value: parking },
+    { icon: <MdBalcony />, label: "Balconies", value: numberofbalconies },
   ];
 
   const details = [
     { label: "Property ID", value: "Not Specified" },
-    { label: "Age of Property", value: ageofproperty|| "Not Specified" },
-    { label: "Transaction Type", value:transactionType|| "Not Specified" },
+    { label: "Age of Property", value: ageofproperty || "Not Specified" },
+    { label: "Transaction Type", value: transactionType || "Not Specified" },
     { label: "Floor Number", value: floorno || "Not Specified" },
-    { label: "Facing", value: facing|| "Not Specified" },
-    { label: "Car Parking", value:numberofcarparking|| "Not Specified" },
-    { label: "Water Supply", value:watersupply|| "Not Specified" },
-    { label: "Ownership", value: ownershipType|| "Not Specified" },
+    { label: "Facing", value: facing || "Not Specified" },
+    { label: "Car Parking", value: numberofcarparking || "Not Specified" },
+    { label: "Water Supply", value: watersupply || "Not Specified" },
+    { label: "Ownership", value: ownershipType || "Not Specified" },
   ];
 
   const formatPrice = (price) => {
@@ -140,12 +122,16 @@ console.log(images)
             <div className="flex flex-col md:flex-row gap-4 h-[500px]">
               <div className="relative w-full md:w-3/4 h-full rounded-2xl overflow-hidden group">
                 <img
-                  loading="lazy"
-                  src={images?.[0] || dummy }
-                  alt="Main property view"
+                  src={filteredProperty?.mediaFiles?.[0]?.url || dummy}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-4 right-4 flex flex-col gap-3">
+
+                {filteredProperty?.mediaFiles?.[0]?.tag && (
+                  <span className="absolute top-3 right-3 bg-black/70 text-white px-3 py-1 text-sm rounded-md">
+                    {filteredProperty.mediaFiles[0].tag}
+                  </span>
+                )}
+                {/* <div className="absolute bottom-4 right-4 flex flex-col gap-3">
                   <button className="bg-white/80 p-3 rounded-full text-gray-700 hover:bg-white hover:text-pink-600 transition">
                     <BsArrowsFullscreen />
                   </button>
@@ -155,25 +141,24 @@ console.log(images)
                   <button className="bg-white/80 p-3 rounded-full text-gray-700 hover:bg-white hover:text-pink-600 transition">
                     <FiHeart />
                   </button>
-                </div>
+                </div> */}
               </div>
               <div className="w-full md:w-1/4 flex md:flex-col gap-4">
-                {images.slice(1, 4).map((src, i) => (
+                {filteredProperty?.mediaFiles?.slice(1, 4).map((file, i) => (
                   <div
                     key={i}
                     className="relative w-1/3 md:w-full h-full rounded-2xl overflow-hidden"
                   >
                     <img
-                      loading="lazy"
-                      src={src || dummy}
-                      alt={`Property view ${i + 2}`}
+                      src={file.url || dummy}
                       className="w-full h-full object-cover"
                     />
-                    {i === 2 && images.length > 4 && (
-                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white cursor-pointer">
-                        <span className="text-2xl font-bold">+3</span>
-                        <span className="text-sm">More</span>
-                      </div>
+
+                    {/* TAG BADGE */}
+                    {file.tag && (
+                      <span className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                        {file.tag}
+                      </span>
                     )}
                   </div>
                 ))}
@@ -232,9 +217,7 @@ console.log(images)
               <h3 className="text-2xl font-bold text-gray-800 mb-6">
                 Description
               </h3>
-              <p className="text-gray-600 leading-relaxed">
-                {description}
-              </p>
+              <p className="text-gray-600 leading-relaxed">{description}</p>
             </div>
 
             {/* <div className="bg-[#FFF9FB] p-6 rounded-xl w-full">
@@ -257,10 +240,7 @@ console.log(images)
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-4">
                 {overview.map((item) => (
-                  <div
-                    className="flex items-center space-x-3"
-                    key={item.label}
-                  >
+                  <div className="flex items-center space-x-3" key={item.label}>
                     <div className="text-pink-600 text-2xl">{item.icon}</div>
                     <div>
                       <p className="text-sm text-gray-500">{item.label}</p>
@@ -289,8 +269,10 @@ console.log(images)
               </div>
             </div>
 
-            <LocationAdvantages locationAdvantages={locationAdvantages}/>
-            <ConstructionStatus filteredProperty={getSinglePropertyById(propertyId)}/>
+            <LocationAdvantages locationAdvantages={locationAdvantages} />
+            <ConstructionStatus
+              filteredProperty={getSinglePropertyById(propertyId)}
+            />
           </main>
 
           {/* --- SIDEBAR --- */}
