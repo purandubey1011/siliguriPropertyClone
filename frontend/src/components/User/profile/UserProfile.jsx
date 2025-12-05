@@ -4,33 +4,56 @@ import {
   Save, X, Building, Eye, Heart, Shield, 
   LogOut, CheckCircle, MessageCircle 
 } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import Navbar from '../../Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile = () => {
   // --- 1. Initial State (Simulating data from your API) ---
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState([])
+  const navigate = useNavigate();
 
   // Refs for file inputs
   const profileInputRef = useRef(null);
   const coverInputRef = useRef(null);
+  const {user} = useSelector((state)=> state.auth)
+  console.log("user profile data ->", user);
 
   // Mock Data based on your previous JSON structure
-  const [formData, setFormData] = useState({
-    firstName: "Shivam",
-    lastName: "Tiwari",
-    title: "Mr",
-    email: "shivam.tiwari@example.com", // Added field
-    phoneNumber: "6264667946",
-    whatsappNumber: "5243677895",
-    address: "Barkheda Pathani",
-    city: "Bhopal",
-    state: "MP",
-    pincode: "462001",
-    bio: "Real estate enthusiast looking for premium properties in Bhopal.",
-    role: "Property Owner",
-    profileImage: "", // Empty to test fallback
-    coverImage: ""    // Empty to test fallback
-  });
+  // const [formData, setFormData] = useState({
+  //   firstName: "Shivam",
+  //   lastName: "Tiwari",
+  //   title: "Mr",
+  //   email: "shivam.tiwari@example.com", // Added field
+  //   phoneNumber: "6264667946",
+  //   whatsappNumber: "5243677895",
+  //   address: "Barkheda Pathani",
+  //   city: "Bhopal",
+  //   state: "MP",
+  //   pincode: "462001",
+  //   bio: "Real estate enthusiast looking for premium properties in Bhopal.",
+  //   role: "Property Owner",
+  //   profileImage: "", // Empty to test fallback
+  //   coverImage: ""    // Empty to test fallback
+  // });
+
+  useEffect(() => {
+  if (user) {
+    setFormData(prev => ({
+      ...prev,
+      email: user.email || "",
+      // Add other fields if they exist in user object
+      firstName: user.firstName || prev.firstName,
+      lastName: user.lastName || prev.lastName,
+      role: user.usertype === "owner" ? "Property Owner" : user.usertype,
+      properties: user.properties || [],
+      // You can also add profileImage, coverImage if you store them
+    }));
+  }
+}, [user]);
+
 
   // --- 2. Image Fallback Logic ---
   const dummyProfileImage = "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop";
@@ -191,29 +214,36 @@ const UserProfile = () => {
 
             {/* Quick Stats (Aesthetic touch for Real Estate app) */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <Navbar/>
               <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Dashboard</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
                   <div className="flex items-center text-blue-800">
                     <Building className="w-5 h-5 mr-3" />
-                    <span className="font-medium">Listed Properties</span>
+                    <span className="font-medium">Pending Properties</span>
                   </div>
-                  <span className="text-2xl font-bold text-blue-600">3</span>
+                  <span className="text-2xl font-bold text-blue-600">{"N/A"}</span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
                   <div className="flex items-center text-purple-800">
                     <Eye className="w-5 h-5 mr-3" />
-                    <span className="font-medium">Total Views</span>
+                    <span className="font-medium">Approved Properties</span>
                   </div>
-                  <span className="text-2xl font-bold text-purple-600">1.2k</span>
+                  <span className="text-2xl font-bold text-purple-600">{"N/A"}</span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-pink-50 rounded-lg">
+                {/* <div className="flex items-center justify-between p-3 bg-pink-50 rounded-lg">
                   <div className="flex items-center text-pink-800">
                     <Heart className="w-5 h-5 mr-3" />
                     <span className="font-medium">Favorites</span>
                   </div>
                   <span className="text-2xl font-bold text-pink-600">12</span>
-                </div>
+                </div> */}
+                <button
+  onClick={() => navigate("/user/list")}
+  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center mt-3"
+>
+  View My Properties
+</button>
               </div>
             </div>
 
