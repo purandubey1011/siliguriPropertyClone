@@ -33,7 +33,7 @@ const Commercialdiscription = ({
         <div className="relative">
           <input
             type="number"
-            name="area"
+            name="builtUpArea"
             value={data.builtUpArea}
             onChange={handleChange}
             placeholder="e.g., 110"
@@ -51,7 +51,7 @@ const Commercialdiscription = ({
         <div className="relative">
           <input
             type="number"
-            name="area"
+            name="superBuiltUpArea"
             value={data.superBuiltUpArea}
             onChange={handleChange}
             placeholder="e.g., 110"
@@ -70,7 +70,7 @@ const Commercialdiscription = ({
         <div className="relative">
           <input
             type="number"
-            name="area"
+            name="minnoofSeats"
             value={data.minnoofSeats}
             onChange={handleChange}
             placeholder="e.g., 110"
@@ -91,7 +91,7 @@ const Commercialdiscription = ({
         <div className="relative">
           <input
             type="number"
-            name="area"
+            name="maxnoofSeats"
             value={data.maxnoofSeats}
             onChange={handleChange}
             placeholder="e.g., 110"
@@ -357,7 +357,7 @@ const Commercialdiscription = ({
         <div className="relative">
           <input
             type="number"
-            name="totalfloors"
+            name="passengerLift"
             value={data.passengerLift}
             onChange={handleChange}
             placeholder="e.g., 1"
@@ -371,7 +371,7 @@ const Commercialdiscription = ({
         <div className="relative">
           <input
             type="number"
-            name="totalfloors"
+            name="serviceLift"
             value={data.serviceLift}
             onChange={handleChange}
             placeholder="e.g., 1"
