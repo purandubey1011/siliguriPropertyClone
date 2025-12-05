@@ -909,8 +909,8 @@ const Admindashboarddetail = () => {
                         alt={file.name}
                         className="w-full h-32 object-cover rounded"
                       />
-                      <p className="text-xs text-gray-500 mt-2 truncate">
-                        {file.name}
+                      <p className="text-sm font-medium text-gray-500 mt-2 truncate capitalize">
+                        {file.tag}
                       </p>
                       {file.tag && (
                         <span className="absolute top-3 right-3 bg-pink-600 text-white text-xs px-2 py-1 rounded">

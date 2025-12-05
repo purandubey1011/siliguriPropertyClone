@@ -359,7 +359,7 @@ const activeUsers = users?.filter(u => u.status)?.length || 0;
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
                           <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold">
-                            {user.name.charAt(0)}
+                            {user?.name?.charAt(0)}
                           </div>
                         </div>
                         <div className="ml-4">
