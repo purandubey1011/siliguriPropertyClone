@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Dropdown ke options visible aur readable */
+select option {
+  background-color: white; /* dropdown khulte hi white bg */
+  color: black;            /* text black */
+}
+
+
+/* Desktop / default */
+.swiper-pagination {
+  bottom: -5px !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .swiper-pagination {
+    bottom: 10px !important; /* mobile ke liye aur neeche */
+  }
+}
