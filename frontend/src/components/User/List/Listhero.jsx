@@ -237,7 +237,7 @@ window.location.reload();
   };
 
   return (
-    <div ref={componentRef} className="font-sans bg-[#d9006c] pt-40  px-2 md:px-0 md:rounded-b-3xl">
+    <div ref={componentRef} className="font-sans bg-[#d9006c] pt-22  px-2 md:px-0 md:rounded-b-3xl">
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-20 text-center">
         
         <h1 className="list-title text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-md">
