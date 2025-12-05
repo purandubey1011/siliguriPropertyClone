@@ -227,8 +227,8 @@ console.log(images)
           </div>
 
           {/* --- MAIN SECTION --- */}
-          <main className="lg:col-span-2 space-y-6">
-            <div className="border-b border-gray-200">
+          <main className="lg:col-span-2 space-y-10">
+            <div className="border-b pb-5 border-gray-200">
               <h3 className="text-2xl font-bold text-gray-800 mb-6">
                 Description
               </h3>
@@ -251,7 +251,7 @@ console.log(images)
 
             {/* <FloorPlans filteredProperty={filteredProperty}/> */}
 
-            <div className=" border-b border-gray-200">
+            <div className=" border-b pb-5 border-gray-200">
               <h3 className="text-2xl font-bold text-gray-800 mb-5">
                 Property Overview
               </h3>
@@ -273,7 +273,7 @@ console.log(images)
               </div>
             </div>
 
-            <div className="border-b border-gray-200">
+            <div className="border-b pb-5 border-gray-200">
               <h3 className="text-2xl font-bold text-gray-800 mb-6">
                 Property Details
               </h3>
