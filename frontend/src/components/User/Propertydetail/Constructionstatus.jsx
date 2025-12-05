@@ -18,7 +18,7 @@ const phasesData = [
 
 const StatusCard = ({ phase }) => {
   return (
-    <div className="bg-[#FBFBFB] p-6 rounded-xl space-y-4 hover:shadow-lg hover:-translate-y-1 cursor-pointer transition-all duration-300">
+    <div className="bg-[#FBFBFB] p-6 rounded-xl space-y-3 hover:shadow-lg hover:-translate-y-1 cursor-pointer transition-all duration-300">
       <FiMap className="w-7 h-7 text-[#D10369]" strokeWidth={2} />
       <h3 className="text-2xl font-bold text-gray-900">{phase.title}</h3>
       <p className="text-gray-600">{phase.description}</p>
@@ -30,9 +30,9 @@ const ConstructionStatus = () => {
 
   
   return (
-    <div className="bg-gray-50 font-sans py-16 sm:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
+    <div className="bg-gray-50 font-sans py-16 sm:py-24 lg:py-0">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-1">
+        <div className="mb-5">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
             Construction Status
           </h1>

@@ -125,7 +125,7 @@ const LocationStep = ({ data, handleChange, setFormData, errors }) => {
             Location Advantages
           </h3>
 
-          {data.locationAdvantages.map((item, index) => (
+          {data?.locationAdvantages?.map((item, index) => (
             <div
               key={index}
               className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-4"

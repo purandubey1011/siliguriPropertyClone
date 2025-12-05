@@ -132,8 +132,8 @@ console.log(images)
   };
 
   return (
-    <div className="mt-36 font-sans bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="mt-20 font-sans bg-gray-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
           <div className="lg:col-span-3">
             {/* --- Gallery --- */}
@@ -181,7 +181,7 @@ console.log(images)
             </div>
 
             {/* --- Header --- */}
-            <div className="flex flex-col md:flex-row mt-9 justify-between items-start md:items-center mb-6">
+            <div className="flex flex-col md:flex-row mt-9 justify-between items-start md:items-center">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
                   {propertyTitle}
@@ -227,8 +227,8 @@ console.log(images)
           </div>
 
           {/* --- MAIN SECTION --- */}
-          <main className="lg:col-span-2 space-y-8">
-            <div className="py-8 border-b border-gray-200">
+          <main className="lg:col-span-2 space-y-6">
+            <div className="border-b border-gray-200">
               <h3 className="text-2xl font-bold text-gray-800 mb-6">
                 Description
               </h3>
@@ -251,8 +251,8 @@ console.log(images)
 
             {/* <FloorPlans filteredProperty={filteredProperty}/> */}
 
-            <div className="py-8 border-b border-gray-200">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">
+            <div className=" border-b border-gray-200">
+              <h3 className="text-2xl font-bold text-gray-800 mb-5">
                 Property Overview
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-4">
@@ -273,7 +273,7 @@ console.log(images)
               </div>
             </div>
 
-            <div className="py-8 border-b border-gray-200">
+            <div className="border-b border-gray-200">
               <h3 className="text-2xl font-bold text-gray-800 mb-6">
                 Property Details
               </h3>
