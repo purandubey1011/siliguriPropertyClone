@@ -101,11 +101,29 @@ export const getFilteredProperties = createAsyncThunk(
   }
 );
 
+export const deleteProperty = createAsyncThunk(
+  "property/delete",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete("/property/deleteproperty", {
+        data, // axios delete me body bhejne ke liye
+        withCredentials: true,
+      });
+      return { ...response.data, propertyId: data.propertyId }; // propertyId return karenge state update ke liye
+    } catch (err) {
+      const message =
+        err?.response?.data?.message || err.message || "Request failed";
+      return rejectWithValue(message);
+    }
+  }
+);
+
 const propertySlice = createSlice({
   name: "property",
   initialState: {
     properties: [],
     owner: {},
+    loading: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -166,6 +184,19 @@ const propertySlice = createSlice({
       })
       .addCase(getFilteredProperties.pending, (state, action) => {
         state.properties = [];
+      })
+      .addCase(deleteProperty.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteProperty.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.properties se deleted property ko remove kar do
+        state.properties = state.properties.filter(
+          (property) => property._id !== action.payload.propertyId
+        );
+      })
+      .addCase(deleteProperty.rejected, (state, action) => {
+        state.loading = false;
       });
   },
 });

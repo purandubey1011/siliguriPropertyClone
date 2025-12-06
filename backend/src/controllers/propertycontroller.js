@@ -188,6 +188,41 @@ const createProperty = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+const deleteProperty = catchAsyncErrors(async (req, res, next) => {
+  const { propertyId, userId } = req.body;
+
+  // Check inputs
+  if (!propertyId || !userId) {
+    return next(new ErrorHandler("propertyId and userId are required", 400));
+  }
+
+  // Find user
+  const user = await userModel.findById(userId);
+  if (!user) {
+    return next(new ErrorHandler("User not found", 404));
+  }
+
+  // Find property
+  const property = await propertyModel.findById(propertyId);
+  if (!property) {
+    return next(new ErrorHandler("Property not found", 404));
+  }
+
+  // Remove propertyId from user.properties
+  user.properties = user.properties.filter(
+    (id) => id.toString() !== propertyId.toString()
+  );
+
+  // Delete property
+  await Promise.all([user.save(), property.deleteOne()]);
+
+  res.status(200).json({
+    success: true,
+    message: "Property deleted successfully",
+  });
+});
+
+
 const uploadImage = catchAsyncErrors(async (req, res) => {
   const imagekit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
@@ -675,4 +710,5 @@ module.exports = {
   removeOwner,
   getFilteredProperties,
   getAllUsers,
+  deleteProperty
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProperty } from "../../store/propertySlice";
+import { getAllProperty, deleteProperty } from "../../store/propertySlice";
 import { Link } from "react-router-dom";
 import {
   FiHome,
@@ -19,19 +19,12 @@ import Navbar from "../Navbar";
 // --- Animation Variants ---
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { type: "spring", stiffness: 100 },
-  },
+  visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } },
 };
 
 // --- Helper Functions for Styling ---
@@ -64,23 +57,18 @@ const getStatusIcon = (status) => {
 };
 
 // --- Reusable Property Card Sub-component ---
-const PropertyCard = ({ property }) => {
-  const ownerName = `${property.firstName || ""} ${
-    property.lastName || ""
-  }`.trim();
+const PropertyCard = ({ property, onDelete }) => {
+  const ownerName = `${property.firstName || ""} ${property.lastName || ""}`.trim();
   const location = `${property.city || ""}, ${property.state || ""}`.trim();
   const imageUrl =
     property.mediaFiles?.[0]?.url ||
     "https://images.unsplash.com/photo-1618858510480-d079a17fd586?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170";
 
   const displayPrice = () => {
-    if (property.rent) {
-      return `₹${property.rent.toLocaleString()}/month`;
-    }
+    if (property.rent) return `₹${property.rent.toLocaleString()}/month`;
     if (property.projectUnits) {
       const startingPrice = property.projectUnits[0].priceFrom;
-      const endingPrice =
-        property.projectUnits[property.projectUnits.length - 1].priceTo;
+      const endingPrice = property.projectUnits[property.projectUnits.length - 1].priceTo;
       return `₹${startingPrice} - ₹${endingPrice}`;
     }
     return "Price not listed";
@@ -109,9 +97,7 @@ const PropertyCard = ({ property }) => {
         </span>
       </div>
       <div className="p-5">
-        <p className="text-sm text-pink-600 font-semibold">
-          {property.propertyType}
-        </p>
+        <p className="text-sm text-pink-600 font-semibold">{property.propertyType}</p>
         <h3 className="text-xl font-bold text-gray-900 truncate mt-1">
           {property.propertyTitle || property.title}
         </h3>
@@ -140,7 +126,10 @@ const PropertyCard = ({ property }) => {
             >
               <FiEdit2 />
             </Link>
-            <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-red-600 transition-colors">
+            <button
+              onClick={() => onDelete(property._id)}
+              className="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-red-600 transition-colors"
+            >
               <FiTrash2 />
             </button>
           </div>
@@ -153,25 +142,26 @@ const PropertyCard = ({ property }) => {
 // --- Main Component ---
 const OwnerProperties = () => {
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.auth.user);
   const properties = useSelector((state) => state.property.properties);
-  console.log("user -> ", user, "===", "propperty6+->", properties);
 
   const UserProperty = useMemo(() => {
     if (!user || !user.properties || !properties) return [];
-
-    return properties.filter((property) =>
-      user.properties.includes(property._id)
-    );
+    return properties.filter((property) => user.properties.includes(property._id));
   }, [properties, user]);
-  console.log(UserProperty.length);
 
   useEffect(() => {
     if (!properties || properties.length === 0) {
       dispatch(getAllProperty());
     }
   }, []);
+
+  // --- Delete Handler ---
+  const handleDeleteProperty = (propertyId) => {
+    if (!window.confirm("Are you sure you want to delete this property?")) return;
+
+    dispatch(deleteProperty({ propertyId, userId: user._id }));
+  };
 
   return (
     <motion.div
@@ -202,10 +192,14 @@ const OwnerProperties = () => {
         </motion.header>
 
         <main>
-          {UserProperty ? (
+          {UserProperty && UserProperty.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {UserProperty.map((property) => (
-                <PropertyCard key={property._id} property={property} />
+                <PropertyCard
+                  key={property._id}
+                  property={property}
+                  onDelete={handleDeleteProperty}
+                />
               ))}
             </div>
           ) : (
@@ -218,8 +212,7 @@ const OwnerProperties = () => {
                 You haven't listed any properties yet.
               </h3>
               <p className="mt-2 text-gray-500">
-                Start by listing your first property to attract buyers and
-                tenants.
+                Start by listing your first property to attract buyers and tenants.
               </p>
               <Link
                 to="/owner/list-property"
