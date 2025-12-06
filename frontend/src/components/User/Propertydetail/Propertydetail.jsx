@@ -16,6 +16,8 @@ import {
   MdAreaChart,
   MdOutlineSimCardDownload,
 } from "react-icons/md";
+import { LuCircleDashed } from "react-icons/lu";
+
 import LocationAdvantages from "./Locationadvantage.jsx";
 import FloorPlans from "./FloorPlan.jsx";
 import ConstructionStatus from "./Constructionstatus.jsx";
@@ -76,28 +78,60 @@ const Propertydetail = () => {
     phoneNumber,
     whatsappNumber,
     locationAdvantages,
+    dateOfPossession,
   } = filteredProperty || {};
 
   const images = filteredProperty?.mediaFiles?.map((img) => img.url) || [];
 
+  const formatValue = (val) => {
+    if (!val) return "Not Specified";
+    if (typeof val !== "string") return val; // numbers ko untouched rehne do
+    return val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+  };
+
   const overview = [
-    { icon: <FaBed />, label: "Bedrooms", value: bedrooms },
-    { icon: <MdAreaChart />, label: "Super Area", value: superBuiltUpArea },
-    { icon: <BsBuilding />, label: "Property Type", value: propertyType },
-    { icon: <BsCircle />, label: "Status", value: typeOfPossession },
-    { icon: <MdChair />, label: "Furnishing", value: furnishing },
-    { icon: <FiCheckCircle />, label: "Verification", value: verification },
-    { icon: <FaBath />, label: "Bathrooms", value: bathrooms },
-    { icon: <FaCar />, label: "Parking", value: parking },
-    { icon: <MdBalcony />, label: "Balconies", value: numberofbalconies },
+    { icon: <FaBed />, label: "Bedrooms", value: formatValue(bedrooms) },
+    {
+      icon: <MdAreaChart />,
+      label: "Super Area",
+      value: formatValue(superBuiltUpArea),
+    },
+    {
+      icon: <BsBuilding />,
+      label: "Property Type",
+      value: formatValue(propertyType),
+    },
+    {
+      icon: <LuCircleDashed />,
+      label: "Status",
+      value: formatValue(typeOfPossession),
+    },
+    { icon: <MdChair />, label: "Furnishing", value: formatValue(furnishing) },
+    {
+      icon: <FiCheckCircle />,
+      label: "Verification",
+      value: formatValue(verification),
+    },
+    { icon: <FaBath />, label: "Bathrooms", value: formatValue(bathrooms) },
+    { icon: <FaCar />, label: "Parking", value: formatValue(parking) },
+    {
+      icon: <MdBalcony />,
+      label: "Balconies",
+      value: formatValue(numberofbalconies),
+    },
   ];
+
+  const capitalize = (str) =>
+    str
+      ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+      : "Not Specified";
 
   const details = [
     { label: "Property ID", value: "Not Specified" },
     { label: "Age of Property", value: ageofproperty || "Not Specified" },
     { label: "Transaction Type", value: transactionType || "Not Specified" },
     { label: "Floor Number", value: floorno || "Not Specified" },
-    { label: "Facing", value: facing || "Not Specified" },
+    { label: "Facing", value: capitalize(facing) },
     { label: "Car Parking", value: numberofcarparking || "Not Specified" },
     { label: "Water Supply", value: watersupply || "Not Specified" },
     { label: "Ownership", value: ownershipType || "Not Specified" },
@@ -169,11 +203,11 @@ const Propertydetail = () => {
             <div className="flex flex-col md:flex-row mt-9 justify-between items-start md:items-center">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  {propertyTitle}
+                  {capitalize(propertyTitle)}
                 </h1>
                 <div className="flex items-center mt-2 space-x-4">
                   <p className="text-sm text-gray-600">
-                    by {firstName} {lastName}
+                    by {capitalize(firstName)} {lastName}
                   </p>
                   <span className="bg-pink-100 text-pink-700 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center space-x-1">
                     <FiCheckCircle />
@@ -182,7 +216,7 @@ const Propertydetail = () => {
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-600">
                   <FiMapPin className="mr-2 text-pink-600" />
-                  <span>{`${address}, ${city}`}</span>
+                  <span>{`${capitalize(address)}, ${city}`}</span>
                 </div>
               </div>
 
@@ -217,8 +251,13 @@ const Propertydetail = () => {
               <h3 className="text-2xl font-bold text-gray-800 mb-6">
                 Description
               </h3>
-              <p className="text-gray-600 leading-relaxed">{description}</p>
+              <p className="text-gray-600 leading-relaxed">{capitalize(description)}</p>
             </div>
+            {typeOfPossession && typeOfPossession !== "Ready to Move" ? (
+              <ConstructionStatus
+                filteredProperty={getSinglePropertyById(propertyId)}
+              />
+            ) : null}
 
             {/* <div className="bg-[#FFF9FB] p-6 rounded-xl w-full">
               <div className="flex justify-between items-center">
@@ -270,9 +309,6 @@ const Propertydetail = () => {
             </div>
 
             <LocationAdvantages locationAdvantages={locationAdvantages} />
-            <ConstructionStatus
-              filteredProperty={getSinglePropertyById(propertyId)}
-            />
           </main>
 
           {/* --- SIDEBAR --- */}
