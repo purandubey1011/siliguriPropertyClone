@@ -8,6 +8,7 @@ const { transporter } = require("../utils/Sendmail")
 const GoogleStratgy = require("passport-google-oauth20").Strategy
 
 
+
 const registerUser = catchAsyncErrors(async (req, res, next) => {
 
     const { name, email, password } = req.body
@@ -89,6 +90,75 @@ const getCurrentUser = catchAsyncErrors(async(req, res)=>{
         user
     })
 } )
+
+
+
+
+
+const updateProfile = async (req, res, next) => {
+    try {
+        const allowedFields = [
+            "firstName",
+            "lastName",
+            "phoneNumber",
+            "whatsappNumber",
+            "address",
+            "city",
+            "state",
+            "pincode",
+            "bio"
+        ];
+        console.log(req.user.id)
+
+        const updates = {};
+        allowedFields.forEach(key => {
+            if (req.body[key] !== undefined) {
+                updates[key] = req.body[key];
+            }
+        });
+
+
+
+         // Add uploaded images
+    if (req.files?.profileImage) {
+      updates.profileImage = req.files.profileImage[0].path; // or req.files.profileImage[0].filename depending on your multer setup
+    }
+    if (req.files?.coverImage) {
+      updates.coverImage = req.files.coverImage[0].path;
+    }
+
+        const user = await User.findByIdAndUpdate(
+            req.user.id,
+            updates,
+            { new: true }
+        );
+        console.log(user)
+
+        return res.status(200).json({
+            success: true,
+            message: "Profile updated",
+            user
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+
+// module.exports = { updateProfile };
+
+
+
+
+
+
+
+
+
+
 
 const logout = catchAsyncErrors(async (req, res, next) => {
     res.cookie("token", "");
@@ -175,4 +245,4 @@ const resetPassword = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-module.exports = { registerUser, login, logout,getCurrentUser,forgotPassword,resetPassword }
+module.exports = { registerUser, login, logout,getCurrentUser,updateProfile,forgotPassword,resetPassword }

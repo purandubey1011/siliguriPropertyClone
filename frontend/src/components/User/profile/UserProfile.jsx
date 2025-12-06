@@ -16,17 +16,31 @@ import {
   CheckCircle,
   MessageCircle,
 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../Navbar";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUser, updateProfile } from "../../../store/authSlice";
 
 const UserProfile = () => {
   // --- 1. Initial State (Simulating data from your API) ---
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState([]);
+const [formData, setFormData] = useState({
+  title: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  whatsappNumber: "",
+  address: "",
+  city: "",
+  pincode: "",
+  bio: "",
+  profileImage: "",
+  coverImage: ""
+});
   const navigate = useNavigate();
-
+const dispatch = useDispatch()
   // Refs for file inputs
   const profileInputRef = useRef(null);
   const coverInputRef = useRef(null);
@@ -51,41 +65,35 @@ const UserProfile = () => {
   };
 
   const { approved, pending } = getCounts(userProperties);
+  console.log(user)
 
-  // Mock Data based on your previous JSON structure
-  // const [formData, setFormData] = useState({
-  //   firstName: "Shivam",
-  //   lastName: "Tiwari",
-  //   title: "Mr",
-  //   email: "shivam.tiwari@example.com", // Added field
-  //   phoneNumber: "6264667946",
-  //   whatsappNumber: "5243677895",
-  //   address: "Barkheda Pathani",
-  //   city: "Bhopal",
-  //   state: "MP",
-  //   pincode: "462001",
-  //   bio: "Real estate enthusiast looking for premium properties in Bhopal.",
-  //   role: "Property Owner",
-  //   profileImage: "", // Empty to test fallback
-  //   coverImage: ""    // Empty to test fallback
-  // });
+  
+ 
 
   useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        email: user.email || "",
-        // Add other fields if they exist in user object
-        firstName: user.firstName || prev.firstName,
-        lastName: user.lastName || prev.lastName,
-        role: user.usertype === "owner" ? "Property Owner" : user.usertype,
-        properties: user.properties || [],
-        date : user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "",
-        // You can also add profileImage, coverImage if you store them
+  if (user) {
+    setFormData({
+      title: user.title || "",
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      email: user.email || "",
+      phoneNumber: user.phoneNumber || "",
+      whatsappNumber: user.whatsappNumber || "",
+      address: user.address || "",
+      city: user.city || "",
+      pincode: user.pincode || "",
+      bio: user.bio || "",
+      profileImage: user.profileImage || "",
+      coverImage: user.coverImage || "",
+      role: user.usertype === "owner" ? "Property Owner" : user.usertype,
+      properties: user.properties || [],
+      date: user.createdAt
+        ? new Date(user.createdAt).toLocaleDateString()
+        : "",
+    });
+  }
+}, [user]);
 
-      }));
-    }
-  }, [user]);
 
   // --- 2. Image Fallback Logic ---
   const dummyProfileImage =
@@ -93,8 +101,9 @@ const UserProfile = () => {
   const dummyCoverImage =
     "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2000&auto=format&fit=crop";
 
-  const displayProfileImage = user?.avatar || dummyProfileImage;
-  const displayCoverImage = formData?.coverImage || dummyCoverImage;
+const displayProfileImage = formData.profileImagePreview || dummyProfileImage;
+const displayCoverImage = formData.coverImagePreview || dummyCoverImage;
+
 
   // --- 3. Handlers ---
   const handleInputChange = (e) => {
@@ -105,27 +114,32 @@ const UserProfile = () => {
     }));
   };
 
-  const handleImageUpload = (e, field) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Create a local URL for preview
-      const imageUrl = URL.createObjectURL(file);
-      setFormData((prev) => ({
-        ...prev,
-        [field]: imageUrl,
-      }));
-    }
-  };
+const handleImageUpload = (e, field) => {
+  const file = e.target.files[0];
+  if (file) {
+    const imageUrl = URL.createObjectURL(file);
+    setFormData((prev) => ({
+      ...prev,
+      [field]: file,       // store the file itself for upload
+      [`${field}Preview`]: imageUrl, // store preview URL for display
+    }));
+  }
+};
 
-  const handleSave = () => {
-    setLoading(true);
-    // Simulate API Call
-    setTimeout(() => {
-      setLoading(false);
-      setIsEditing(false);
-      // alert("Profile Updated Successfully!"); // In real app, use a toast notification
-    }, 1000);
-  };
+
+
+const handleSave = async () => {
+  setLoading(true);
+  try {
+    await dispatch(updateProfile(formData)).unwrap();
+    setIsEditing(false);
+  } catch (err) {
+    console.log("Update failed", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleCancel = () => {
     setIsEditing(false);

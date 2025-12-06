@@ -22,6 +22,9 @@ app.use(express.json());
 app.use(morgan("tiny"))
 app.use(express.urlencoded({extended: false}))
 
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+
 app.route(`/auth/google`).get(passport.authenticate("google",{scope: ["email", "profile"]}))
 app.route("/auth/google/callback").get(passport.authenticate("google",{session:false}),(req,res)=>{
 const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET)

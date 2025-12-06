@@ -34,7 +34,7 @@ export const getCurrentUser = createAsyncThunk(
       const response = await axios.get("/auth/getcurrentuser", {
         withCredentials: true,
       });
-      console.log(response);
+      console.log("currentuser",response.data);
       return response.data;
     } catch (err) {
       const message =
@@ -43,6 +43,25 @@ export const getCurrentUser = createAsyncThunk(
     }
   }
 );
+
+
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.put("/auth/update-profile", data, {
+        withCredentials: true,
+      });
+      console.log("dhhh",response.data)
+      return response.data; // should return updated user
+    } catch (err) {
+      const message =
+        err?.response?.data?.message || err.message || "Profile update failed!";
+      return rejectWithValue(message);
+    }
+  }
+);
+
 
 export const LoginInUser = createAsyncThunk(
   "auth/login",
@@ -203,6 +222,25 @@ const authSlice = createSlice({
         state.error = null;
         state.message = null;
       })
+
+
+      .addCase(updateProfile.pending, (state) => {
+  state.status = "loading";
+  state.message = null;
+  state.error = null;
+})
+.addCase(updateProfile.fulfilled, (state, action) => {
+  state.status = "succeeded";
+  state.user = action.payload?.user;
+  state.message = action.payload?.message || "Profile updated successfully!";
+  state.error = null;
+})
+.addCase(updateProfile.rejected, (state, action) => {
+  state.status = "failed";
+  state.error = action.payload || "Profile update failed!";
+  state.message = null;
+})
+
       .addCase(forgotPassword.pending, (state) => {
         state.status = "loading";
         state.message = null;
