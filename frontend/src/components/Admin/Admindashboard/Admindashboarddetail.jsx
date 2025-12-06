@@ -448,17 +448,34 @@ const Admindashboarddetail = ({userType }) => {
 
   const allAmenities = [
     "Lift",
-    "Car Parking",
-    "Power Backup",
-    "Water Supply",
-    "Security",
-    "Gymnasium",
-    "Swimming Pool",
-    "Clubhouse",
-    "Gas Pipeline",
-    "Park",
-    "Servant Room",
-    "AC",
+  "Car Parking",
+  "Power Backup",
+  "Water Supply",
+  "Security",
+  "Gymnasium",
+  "Swimming Pool",
+  "Clubhouse",
+  "Gas Pipeline",
+  "Park",
+  "Servant Room",
+  "AC",
+  "Water Storage",
+  "Air Conditioned",
+  "Banquet Hall",
+  "Conference Room",
+  "Intercom Facility",
+  "Internet/Wi-Fi Connectivity",
+  "Jogging and Strolling Track",
+  "Maintenance Staff",
+  "Outdoor Tennis Courts",
+  "Private Garage",
+  "Private Terrace/Garden",
+  "Rainwater Harvesting",
+  "Reserved Parking",
+  "Vaastu Compliant",
+  "Visitor Parking",
+  "Waste Disposal",
+  "Wrap Around Balcony"
   ];
 
   return (
@@ -502,7 +519,7 @@ const Admindashboarddetail = ({userType }) => {
 
 
 
-                {userType==="Admin" && (
+                {userType==="admin" && (
                   <select
                     value={formData.verification || "pending"}
                     onChange={(e) => handleVerificationChange(e.target.value)}
@@ -771,6 +788,8 @@ const Admindashboarddetail = ({userType }) => {
                 value={
                   isEditing ? formData.watersupply : singleProperty.watersupply
                 }
+                 type="select"
+                options={["true", "false"]}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
