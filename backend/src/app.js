@@ -8,6 +8,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken")
 require("./config/passport.js")(passport)
 const app = express()   
+const path = require("path");
 
 app.use(cookieParser())
 
