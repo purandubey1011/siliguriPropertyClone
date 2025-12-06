@@ -42,11 +42,15 @@ const MediaUpload = ({
   };
 
   const authenticateUpload = async () => {
+    try {
     const response = await axios.get(
       `${import.meta.env.VITE_BACKEND_URI}/api/v1/property/uploadassets`,
       { withCredentials: true }
     );
     return response.data;
+    } catch (error) {
+      throw new Error("Authentication failed error ->", error);
+    } 
   };
 
   const uploadToImageKit = async (file, authParams) => {

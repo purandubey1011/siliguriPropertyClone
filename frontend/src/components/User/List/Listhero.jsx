@@ -89,8 +89,8 @@ const Listhero = () => {
    const [activeTab, setActiveTab] = useState('Buy');
   const [formData, setFormData] = useState({
     location: '',
-    propertyType: 'Flat',
-    bedrooms: '1BHK'
+    propertyType: '',
+    bedrooms: ''
   });
   
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -208,7 +208,6 @@ const Listhero = () => {
 
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
-    console.log('Form submitted:', { ...formData, transactionType: activeTab });
      
 navigate(`/user/list?propertyType=${activeTab}&location=${encodeURIComponent(formData.location)}&type=${formData.propertyType}&bhk=${formData.bedrooms}`);
 window.location.reload();
@@ -231,7 +230,6 @@ window.location.reload();
 
   const handlePropertyTypeChange = (e) => {
     const newType = e.target.value;
-    console.log(newType)
     const options = getBhkOptions(newType);
     setFormData(prev => ({ ...prev, propertyType: newType, bhk: options[0] }));
   };

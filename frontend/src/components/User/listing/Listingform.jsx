@@ -33,8 +33,10 @@ import { toast } from "react-toastify";
 
 // --- Validation Schemas ---
 const propertySchema = z.object({
-title: z.enum(["Mr", "Mrs"]),
-  propertyTitle: z.string().min(5, "Property title must be at least 5 characters"),
+  title: z.enum(["Mr", "Mrs"]),
+  propertyTitle: z
+    .string()
+    .min(5, "Property title must be at least 5 characters"),
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   area: z.string().min(1, "Area is required"),
@@ -54,10 +56,18 @@ title: z.enum(["Mr", "Mrs"]),
   ]),
 
   transactionType: z.enum(["Sell", "Rent", "Lease", "PG"]),
-  tenantType: z.enum(["Any", "Family", "Bachelors (Men)", "Bachelors (Women)", "Company"]),
+  tenantType: z.enum([
+    "Any",
+    "Family",
+    "Bachelors (Men)",
+    "Bachelors (Women)",
+    "Company",
+  ]),
 
   rent: z.string().regex(/^\d+$/, "Rent must be a valid number"),
-  security: z.string().regex(/^\d+$/, "Security deposit must be a valid number"),
+  security: z
+    .string()
+    .regex(/^\d+$/, "Security deposit must be a valid number"),
 
   negotiable: z.boolean(),
 
@@ -91,18 +101,27 @@ title: z.enum(["Mr", "Mrs"]),
   numberofbalconies: z.string(),
 
   projectUnits: z.array(z.any()),
-typeOfApartment: z.string().optional(),
-builtUpArea: z.string().optional(),
-superBuiltUpArea: z.string().optional(),
-typeOfPossession: z.string().optional(),
-dateOfPossession: z.string().optional(),
-rate: z.string().optional(),
-bookingAmount: z.string().optional(),
+  typeOfApartment: z.string().optional(),
+  builtUpArea: z.string().optional(),
+  superBuiltUpArea: z.string().optional(),
+  typeOfPossession: z.string().optional(),
+  dateOfPossession: z.string().optional(),
+  rate: z.string().optional(),
+  bookingAmount: z.string().optional(),
   typeOfParking: z.string().optional(),
-    // recent changes for villa
-    totalPlotArea: z.string().min(1, "Plot area is required").regex(/^\d+$/, "Must be a number"),
-  vacantArea: z.string().min(1, "Vacant area is required").regex(/^\d+$/, "Must be a number"),
-  buildingArea: z.string().min(1, "Building area is required").regex(/^\d+$/, "Must be a number"),
+  // recent changes for villa
+  totalPlotArea: z
+    .string()
+    .min(1, "Plot area is required")
+    .regex(/^\d+$/, "Must be a number"),
+  vacantArea: z
+    .string()
+    .min(1, "Vacant area is required")
+    .regex(/^\d+$/, "Must be a number"),
+  buildingArea: z
+    .string()
+    .min(1, "Building area is required")
+    .regex(/^\d+$/, "Must be a number"),
   terraceType: z.string().min(1, "Terrace type is required"),
   plotArea: z.string().min(1, "Plot area is required"),
   plotAreaUnit: z.string(), // To store Sqft or Katha
@@ -111,26 +130,25 @@ bookingAmount: z.string().optional(),
   gatedSociety: z.boolean(),
   projectStatus: z.string().min(1, "Project status is required"), // Ready/Under Construction
   maintenancePeriod: z.string(), // Monthly/Yearly
-    // -------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------
 
+  // Project-Level Fields (from ProjectForm)
+  totalProjectArea: z.string().optional(),
+  totalFlats: z.string().optional(),
+  totalFloors: z.string().optional(),
+  projectStatus: z.string().optional(),
+  ownershipType: z.string().optional(),
+  maintenanceCharges: z.string().optional(),
+  ratePerSqft: z.string().optional(),
+  furnishing: z.string().optional(),
 
-
-    // Project-Level Fields (from ProjectForm)
-totalProjectArea: z.string().optional(),
-totalFlats: z.string().optional(),
-totalFloors: z.string().optional(),
-projectStatus: z.string().optional(),
-ownershipType: z.string().optional(),
-maintenanceCharges: z.string().optional(),
-ratePerSqft: z.string().optional(),
-furnishing: z.string().optional(),
-
-
-    propertyKind: z.string().min(0,"This field is required"),
+  propertyKind: z.string().min(0, "This field is required"),
   // pricefrom : z.string().min(1, "Minimum price is required").regex(/^\d+$/, "Must be a valid number"),
   // priceto: z.string().min(1, "Maximum price is required").regex(/^\d+$/, "Must be a valid number"),
-  phoneNumber : z.string().min(1, "Phone number is required").regex(/^\d+$/, "Must be a valid number"),
-
+  phoneNumber: z
+    .string()
+    .min(1, "Phone number is required")
+    .regex(/^\d+$/, "Must be a valid number"),
 });
 
 export const FormField = ({ label, children, error, className = "" }) => {
@@ -169,8 +187,6 @@ export const Checkbox = ({ id, label, checked, onChange }) => (
   </label>
 );
 
-
-
 const Listingform = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -187,109 +203,108 @@ const Listingform = () => {
       formData: savedData
         ? JSON.parse(savedData)
         : {
-          title: "Mr",
-          propertyTitle: "",
-          firstName: "",
-          lastName: "",
-          propertyType: "Flat/Apartment",
-          tenantType: "Any",
-          description: "",
-          area: "",
-          bedrooms: "",
-          bathrooms: "",
-          rent: "",
-          security: "",
-          negotiable: false,
-          address: "",
-          city: "",
-          state: "",
-          pincode: "",
-          locationAdvantages: [{ title: "", range: "" }],
-          amenities: {},
-          mediaFiles: [],
-          kitchen: "",
-          floorno: "",
-          totalfloors: "",
-          facing: "",
-          ageofproperty: "",
-          parking: false,
-          numberofcarparking: "",
-          numberofbikeparking: "",
-          watersupply: "",
-          furnishing: "Unfurnished",
-          projectUnits: [{
-            typeOfApartment: "1 BHK",
+            title: "Mr",
+            propertyTitle: "",
+            firstName: "",
+            lastName: "",
+            propertyType: "Flat/Apartment",
+            tenantType: "Any",
+            description: "",
+            area: "",
+            bedrooms: "",
+            bathrooms: "",
+            rent: "",
+            security: "",
+            negotiable: false,
+            address: "",
+            city: "",
+            state: "",
+            pincode: "",
+            locationAdvantages: [{ title: "", range: "" }],
+            amenities: {},
+            mediaFiles: [],
+            kitchen: "",
+            floorno: "",
+            totalfloors: "",
+            facing: "",
+            ageofproperty: "",
+            parking: false,
+            numberofcarparking: "",
+            numberofbikeparking: "",
+            watersupply: "",
+            furnishing: "Unfurnished",
+            projectUnits: [
+              {
+                typeOfApartment: "1 BHK",
+                typeOfPossession: "Ready to Move",
+                possessionDate: "",
+                ageofproperty: "",
+                priceFrom: "",
+                priceTo: "",
+                areaFrom: "",
+                areaTo: "",
+                agent: "",
+              },
+            ],
+            transactionType: "Sell",
+            builtUpArea: "",
+            superBuiltUpArea: "",
+            numberofbalconies: "",
+            propertyKind: "Residential",
             typeOfPossession: "Ready to Move",
-            possessionDate:"",
-            ageofproperty:"",
-            priceFrom: "",
-            priceTo: "",
-            areaFrom: "",
-            areaTo: "",
-            agent:"",
-            
-            
-          }],
-          transactionType: "Sell",
-          builtUpArea: "",
-          superBuiltUpArea: "",
-          numberofbalconies: "",
-          propertyKind: "Residential",
-          typeOfPossession: "Ready to Move",
-          id: user?._id,
-          ownershipType: "Freehold",
-          minnoofSeats:"",
-          maxnoofSeats:"",
-          noOfCabin:"",
-          // ----------------------------------
-          // pricefrom: "",
-          // priceto: "",
-          noOfMeetingRooms:"",
-          OfficeWashrooom:"",
-          receptionArea:"",
-          pantryType:"",
-          fireSafety:[],
-          noofstaircases:"",
-          lift:"",
-          passengerLift:"",
-          serviceLift:"",
-          featuredImage:[],
-          brochure:[],
-          floorPlan:[],
-          whatsappNumber:"",
-          phoneNumber:"",
-          dateOfPossession:"",
-          maintenanceCharges:"",
-          typeOfParking:"",
-          ReraId:"",
-          bookingAmount:"",
+            id: user?._id,
+            ownershipType: "Freehold",
+            minnoofSeats: "",
+            maxnoofSeats: "",
+            noOfCabin: "",
+            // ----------------------------------
+            // pricefrom: "",
+            // priceto: "",
+            noOfMeetingRooms: "",
+            OfficeWashrooom: "",
+            receptionArea: "",
+            pantryType: "",
+            fireSafety: [],
+            noofstaircases: "",
+            lift: "",
+            passengerLift: "",
+            serviceLift: "",
+            featuredImage: [],
+            brochure: [],
+            floorPlan: [],
+            whatsappNumber: "",
+            phoneNumber: "",
+            dateOfPossession: "",
+            maintenanceCharges: "",
+            typeOfParking: "",
+            ReraId: "",
+            bookingAmount: "",
 
-          totalPlotArea: "",
-          vacantArea: "",
-          buildingArea: "",
-          terraceType: "",
+            totalPlotArea: "",
+            vacantArea: "",
+            buildingArea: "",
+            terraceType: "",
 
-          plotArea: "",
-          plotAreaUnit: "Sqft", // Default to Sqft
-          totalProjectArea: "",
-          landStatus: "Registered",
-          gatedSociety: false,
-          projectStatus: "Ready to Move",
-          maintenancePeriod: "Monthly",
+            plotArea: "",
+            plotAreaUnit: "Sqft", // Default to Sqft
+            totalProjectArea: "",
+            landStatus: "Registered",
+            gatedSociety: false,
+            projectStatus: "Ready to Move",
+            maintenancePeriod: "Monthly",
 
-
-          // NEW GLOBAL PROJECT FIELDS
-  totalProjectArea: "",
-  totalFlats: "",
-  totalFloors: "",
-  projectStatus: "Under Construction", // Default
-  ageofproperty: "",      // For Ready to Move
-  possessionDate: "",     // For Under Construction
-  ownershipType: "Freehold",
-  parking: false,
-  maintenanceCharges: "",
-  ratePerSqft: "",
-  furnishing: "Unfurnished",
+            // NEW GLOBAL PROJECT FIELDS
+            totalProjectArea: "",
+            totalFlats: "",
+            totalFloors: "",
+            projectStatus: "Under Construction", // Default
+            ageofproperty: "", // For Ready to Move
+            possessionDate: "", // For Under Construction
+            ownershipType: "Freehold",
+            parking: false,
+            maintenanceCharges: "",
+            ratePerSqft: "",
+            furnishing: "Unfurnished",
           },
       currentStep: savedStep ? parseInt(savedStep) : 1,
       customAmenities: savedAmenities ? JSON.parse(savedAmenities) : [],
@@ -321,7 +336,6 @@ const Listingform = () => {
   );
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState(initialData.formData);
-  console.log(formData);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -348,7 +362,7 @@ const Listingform = () => {
               title: true,
               firstName: true,
               lastName: true,
-              propertyKind:true,
+              propertyKind: true,
               transactionType: true,
               propertyType: true,
               phoneNumber: true,
@@ -385,23 +399,23 @@ const Listingform = () => {
         case 3:
           const descriptionResult = propertySchema
             .pick({
-              propertyTitle:true,
+              propertyTitle: true,
               description: Isvalid(),
-              ReraId:Isvalid(),
-              typeOfApartment:Isvalid(),
+              ReraId: Isvalid(),
+              typeOfApartment: Isvalid(),
               bedrooms: Isvalid(),
               bathrooms: Isvalid(),
               kitchen: Isvalid(),
-              numberofbalconies:Isvalid(),
+              numberofbalconies: Isvalid(),
               floorno: Isvalid(),
               totalfloors: Isvalid(),
               facing: Isvalid(),
-              area:Isvalid(),
-              builtUpArea:Isvalid(),
-              superBuiltUpArea:Isvalid(),
-              typeOfPossession:Isvalid(),
-              dateOfPossession:Isvalid(),
-              furnishing:Isvalid(),
+              area: Isvalid(),
+              builtUpArea: Isvalid(),
+              superBuiltUpArea: Isvalid(),
+              typeOfPossession: Isvalid(),
+              dateOfPossession: Isvalid(),
+              furnishing: Isvalid(),
               ageofproperty: Isvalid(),
               rent: Isvalid(),
               rate: Isvalid(),
@@ -422,8 +436,7 @@ const Listingform = () => {
               vacantArea: formData.propertyType === "Villa",
               buildingArea: formData.propertyType === "Villa",
               terraceType: formData.propertyType === "Villa",
-           
-            })  
+            })
             .safeParse(formData);
           if (!descriptionResult.success) {
             console.log(descriptionResult);
@@ -444,14 +457,12 @@ const Listingform = () => {
   };
 
   const handleNext = () => {
-    
     if (validateCurrentStep()) {
       const nextStep = Math.min(currentStep + 1, steps.length);
       setCurrentStep(nextStep);
       localStorage.setItem("propertyFormStep", nextStep.toString());
     }
-    console.log('mfknjjnfjrejffjfefshiva');
-    
+    console.log("mfknjjnfjrejffjfefshiva");
   };
 
   const handlePrev = () => {
@@ -493,7 +504,11 @@ const Listingform = () => {
   };
 
   const handleAddCustomAmenity = () => {
-    const newAmenity = customAmenityInput.trim();
+    let newAmenity = customAmenityInput.trim();
+
+    // Capitalize first letter
+    newAmenity = newAmenity.charAt(0).toUpperCase() + newAmenity.slice(1);
+
     if (newAmenity && !customAmenities.includes(newAmenity)) {
       setCustomAmenities((prev) => {
         const newAmenities = [...prev, newAmenity];
@@ -503,6 +518,7 @@ const Listingform = () => {
         );
         return newAmenities;
       });
+
       setFormData((prev) => {
         const newData = {
           ...prev,
@@ -511,6 +527,7 @@ const Listingform = () => {
         localStorage.setItem("propertyFormData", JSON.stringify(newData));
         return newData;
       });
+
       setCustomAmenityInput("");
     }
   };
@@ -576,9 +593,17 @@ const Listingform = () => {
       errors={errors}
     />,
 
-    <UploadStep handleChange={handleChange} data={formData} initialFiles={formData.mediaFiles} acceptedTypes={['image/jpeg', 'image/png' , "video,mp4"]}  onFilesChange={(newfiles) =>handleChange({ target: { name: "mediaFiles", value: [...newfiles] } }) }/>
+    <UploadStep
+      handleChange={handleChange}
+      data={formData}
+      initialFiles={formData.mediaFiles}
+      acceptedTypes={["image/jpeg", "image/png", "video,mp4"]}
+      onFilesChange={(newfiles) =>
+        handleChange({ target: { name: "mediaFiles", value: [...newfiles] } })
+      }
+    />,
   ];
-  
+
   const progressPercentage = ((currentStep - 1) / (steps.length - 1)) * 100;
 
   return (
@@ -687,8 +712,8 @@ const Listingform = () => {
                         draggable: true,
                         progress: undefined,
                         theme: "light",
-                      })
-                        navigate("/");
+                      });
+                      navigate("/");
                     }
                   });
                 }}

@@ -5,7 +5,6 @@ export const createProperty = createAsyncThunk(
   "property/create",
   async (data, { rejectWithValue }) => {
     try {
-      console.info(data);
       const response = await axios.post("/property/createproperty", data, {
         withCredentials: true,
       });
@@ -38,7 +37,6 @@ export const createOwner = createAsyncThunk(
   "property/createowner",
   async (data, { rejectWithValue }) => {
     try {
-      console.info(data);
       const response = await axios.post("/property/createowner", data, {
         withCredentials: true,
       });
@@ -55,7 +53,6 @@ export const removeOwner = createAsyncThunk(
   "property/removeowner",
   async (data, { rejectWithValue }) => {
     try {
-      console.info(data);
       const response = await axios.post("/property/removeowner", data, {
         withCredentials: true,
       });
@@ -72,7 +69,6 @@ export const updateProperty = createAsyncThunk(
   "property/updateproperty",
   async (data, { rejectWithValue }) => {
     try {
-      console.info(data);
       const response = await axios.post(
         `/property/updateproperty/${data.id}`,
         data.data,
@@ -91,7 +87,6 @@ export const getFilteredProperties = createAsyncThunk(
   "property/getfilteredproperties",
   async (data, { rejectWithValue }) => {
     try {
-      console.info(data);
       const response = await axios.post(
         "/property/getfilteredproperties",
         data,
