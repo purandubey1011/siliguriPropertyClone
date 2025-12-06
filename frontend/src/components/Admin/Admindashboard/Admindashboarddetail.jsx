@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProperty, updateProperty } from "../../../store/propertySlice";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Navbar from "../../Navbar";
 
 // const containerVariants = {
 //   hidden: { opacity: 0 },
@@ -193,7 +194,7 @@ const ProjectUnitItem = ({ unit, index, onChange, onRemove, isEditing }) => (
   </div>
 );
 
-const Admindashboarddetail = () => {
+const Admindashboarddetail = ({userType }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -205,25 +206,30 @@ const Admindashboarddetail = () => {
   const [propertyId, setPropertyId] = useState(null);
 
   // Fetch properties on mount
-  useEffect(() => {
-    const fetchProperties = async () => {
-      setLoading(true);
-      try {
+ const fetchProperties = async () => {
+    setLoading(true);
+    try {
+      if (userType === "admin") {
         await dispatch(getAllProperty()).unwrap();
-      } catch (error) {
-        console.error("Error fetching properties:", error);
-        toast.error("Failed to load properties");
-      } finally {
-        setLoading(false);
+      } else if (userType === "owner") {
+        // await dispatch(getOwnerProperties()).unwrap();
+        await dispatch(getAllProperty()).unwrap()
       }
-    };
-    
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+      toast.error("Failed to load properties");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     if (id) {
       localStorage.setItem("propertyId", id);
       setPropertyId(id);
       fetchProperties();
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, userType]);
 
   // Get the single property
   const singleProperty = properties.find((property) => property._id === propertyId);
@@ -463,7 +469,11 @@ const Admindashboarddetail = () => {
         initial="hidden"
         animate="visible"
       >
-        <motion.header  className="mb-8">
+                {userType==="owner" && (
+            <Navbar/>
+          )}
+        <motion.header  className={`mb-8 ${userType==="owner" ? 'mt-20':'mt-2'}`}>
+  
           <p className="text-sm text-gray-500">Dashboard / Property</p>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-1 gap-4">
             <h1 className="text-3xl font-bold text-gray-900">
@@ -489,6 +499,10 @@ const Admindashboarddetail = () => {
                 </>
               ) : (
                 <>
+
+
+
+                {userType==="Admin" && (
                   <select
                     value={formData.verification || "pending"}
                     onChange={(e) => handleVerificationChange(e.target.value)}
@@ -510,6 +524,8 @@ const Admindashboarddetail = () => {
                       ✗ Rejected
                     </option>
                   </select>
+                )}
+
                   <button
                     onClick={() => setIsEditing(true)}
                     className="border border-pink-600 text-pink-600 font-bold py-2 px-6 rounded-full hover:bg-pink-50 transition w-full sm:w-auto"

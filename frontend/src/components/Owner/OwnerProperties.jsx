@@ -62,7 +62,7 @@ const PropertyCard = ({ property, onDelete }) => {
   const location = `${property.city || ""}, ${property.state || ""}`.trim();
   const imageUrl =
     property.mediaFiles?.[0]?.url ||
-    "https://images.unsplash.com/photo-1618858510480-d079a17fd586?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170";
+   "https://imgs.search.brave.com/qqeKWCEx-ixB7YEFXO2PL7zUlw6sRRqCBe1SdmzKUgg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMDgv/ODkyLzE4OC9zbWFs/bC80MDQtZXJyb3It/Y29uY2VwdC1mb3It/bGFuZGluZy1wYWdl/LWZyZWUtdmVjdG9y/LmpwZw";
 
   const displayPrice = () => {
     if (property.rent) return `₹${property.rent.toLocaleString()}/month`;

@@ -40,7 +40,7 @@ const UserRouter = () => {
 
             <Route path='/admin' element={<IsAdmin><Adminlayout/></IsAdmin>}>
                 <Route path='/admin/dashboard' element={<Admindashboard/>}/>
-                <Route path='/admin/dashboard/:id' element={<Admindashboarddetail/>} />
+                <Route path='/admin/dashboard/:id' element={<Admindashboarddetail userType="admin"/>} />
               
                 <Route path='/admin/property-listing' element={<PropertyListing/>} />
                 <Route path='/admin/leadtracker' element={<Leadtracker/>} />
@@ -52,6 +52,7 @@ const UserRouter = () => {
         <Route path='/owner/signup' element={ <OwnerSignUp/>}/>
        <Route path='/owner/listing' element={<Listing/>} />
        <Route path='/owner/myproperties' element={<OwnerProperties/>} />
+       <Route path='/owner/edit-property/:id' element={<Admindashboarddetail userType="owner"/>} />
 
         <Route path='/google'  element={<GoogleLogin/>}/>/
 
